@@ -1,3 +1,4 @@
+console.log("🔥 BOT ĐANG CHẠY FILE INDEX.JS");
 import express from "express";
 import fetch from "node-fetch";
 
