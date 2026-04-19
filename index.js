@@ -1,28 +1,37 @@
 import express from "express";
+import fetch from "node-fetch";
 
 const app = express();
+app.use(express.json());
 
-// test
+// test server
 app.get("/", (req, res) => {
   res.send("OK");
 });
 
 // verify webhook
 app.get("/webhook", (req, res) => {
-  const VERIFY_TOKEN = "abc123"; // fix cứng luôn cho chắc
+  const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
   const mode = req.query["hub.mode"];
   const token = req.query["hub.verify_token"];
   const challenge = req.query["hub.challenge"];
 
   if (mode === "subscribe" && token === VERIFY_TOKEN) {
-    return res.send(challenge);
+    console.log("webhook verified");
+    return res.status(200).send(challenge);
   } else {
-    return res.send("Sai token");
+    return res.sendStatus(403);
   }
 });
 
-// chạy server
-app.listen(10000, () => {
-  console.log("Server chạy rồi");
+// receive message
+app.post("/webhook", async (req, res) => {
+  res.sendStatus(200);
+});
+
+// start server
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
 });
