@@ -17,15 +17,16 @@ app.get("/webhook", (req, res) => {
   const challenge = req.query["hub.challenge"];
 
   if (mode === "subscribe" && token === VERIFY_TOKEN) {
-    console.log("WEBHOOK OK");
+    console.log("WEBHOOK VERIFIED");
     return res.status(200).send(challenge);
   } else {
     return res.sendStatus(403);
   }
 });
 
-// nhận tin nhắn (tạm để trống)
+// receive message
 app.post("/webhook", (req, res) => {
+  console.log("Message received:", req.body);
   res.sendStatus(200);
 });
 
