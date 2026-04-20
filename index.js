@@ -1,9 +1,9 @@
-console.log("🔥 BOT ĐANG CHẠY FILE INDEX.JS");
 import express from "express";
-import fetch from "node-fetch";
 
 const app = express();
 app.use(express.json());
+
+const VERIFY_TOKEN = "abc123";
 
 // test server
 app.get("/", (req, res) => {
@@ -12,27 +12,24 @@ app.get("/", (req, res) => {
 
 // verify webhook
 app.get("/webhook", (req, res) => {
-  const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
-
   const mode = req.query["hub.mode"];
   const token = req.query["hub.verify_token"];
   const challenge = req.query["hub.challenge"];
 
   if (mode === "subscribe" && token === VERIFY_TOKEN) {
-    console.log("webhook verified");
+    console.log("WEBHOOK OK");
     return res.status(200).send(challenge);
   } else {
     return res.sendStatus(403);
   }
 });
 
-// receive message
-app.post("/webhook", async (req, res) => {
+// nhận tin nhắn (tạm để trống)
+app.post("/webhook", (req, res) => {
   res.sendStatus(200);
 });
 
-// start server
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
+  console.log("Server running on port", PORT);
 });
